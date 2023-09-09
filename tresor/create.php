@@ -1,12 +1,6 @@
 <?php require('connexion2.php');
 
 
-$nom = $_POST["nom"];
-$description = $_POST["description"];
-$annee = $_POST["annee"];
-
-
-
 
 $recupA = "SELECT * from artiste";
 $recupC = "SELECT * from categorie";
@@ -14,45 +8,34 @@ $recupC = "SELECT * from categorie";
 $req = $db->prepare('SELECT * FROM artiste');
 $req->execute([]);
 $result = $req->fetchAll(PDO::FETCH_ASSOC);
-// var_dump($result);
+
 
 $req2 = $db->prepare('SELECT * FROM categorie');
 $req2->execute([]);
 $result2 = $req2->fetchAll(PDO::FETCH_ASSOC);
-var_dump($result2);
+
 
 if (!empty($_POST)) {
-    
+
     $nom = $_POST['nom'];
     $description = $_POST['description'];
     $annee = $_POST['annee'];
-    // $artiste = ;
-    // $categorie = $_POST['categorie'];
 
 
-    
     $req3 = $db->prepare('SELECT * FROM artiste WHERE idArtiste = ?');
     $req3->execute(array($_POST['artiste']));
     $resultArtiste = $req3->fetch();
-    // var_dump($resultArtiste);
-    // die();
+
 
     $req4 = $db->prepare('SELECT * FROM categorie WHERE idCategorie = ?');
     $req4->execute(array($_POST['categorie']));
     $resultCategorie = $req4->fetch();
 
     $req0 = $db->prepare('INSERT INTO oeuvre(nom,description,annee,idArtiste,idCategorie) VALUES(?,?,?,?,?)');
-    $req0->execute(array($nom,$description,$annee,$resultArtiste[0],$resultCategorie[0]));
-
-    
+    $req0->execute(array($nom, $description, $annee, $resultArtiste[0], $resultCategorie[0]));
 }
 
-
-
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -76,19 +59,19 @@ if (!empty($_POST)) {
 
         <label for="idArtiste">Nom Artiste</label>
         <select class="form-control" name='artiste'>
-            <?php foreach ($result as $key => $value){ ?>
-            <option value=<?= $value['idArtiste']?>><?= $value['nom']?></option>
+            <?php foreach ($result as $key => $value) { ?>
+                <option value=<?= $value['idArtiste'] ?>><?= $value['nom'] ?></option>
             <?php } ?>
         </select>
-<br><br> <br>
+        <br><br> <br>
         <label for="idCategorie">Nom Categorie</label>
         <select class="form-control" name='categorie'>
-             <?php foreach ($result2 as $key => $value){ ?>
-            <option value=<?= $value['idCategorie']?>><?= $value['nomCategorie']?></option>
+            <?php foreach ($result2 as $key => $value) { ?>
+                <option value=<?= $value['idCategorie'] ?>><?= $value['nomCategorie'] ?></option>
             <?php } ?>
 
         </select>
-<br> <br>
+        <br> <br>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </body>
